@@ -1,0 +1,36 @@
+services:
+  stats-db:
+    container_name: "stats-db"
+    user: "${UID_GID}"
+    image: postgres
+    environment:
+      POSTGRES_DB: stats
+      POSTGRES_PASSWORD: secret
+    volumes:
+      - stats-data:/var/lib/postgresql
+    ports:
+      - "5432:5432"
+    networks:
+      - brady
+  mcsrv:
+    container_name: "mcsrv"
+    user: "${UID_GID}"
+    ports:
+      - "25565:25565"
+    image: ghcr.io/pgmffenthusiasts/bradyverse-backend:latest
+    stdin_open: true
+    tty: true
+    environment:
+      DATABASE_URI: stats-db:5432/stats
+      DATABASE_USER: postgres
+      DATABASE_PASS: secret
+    depends_on:
+      - stats-db
+    networks:
+      - brady
+
+volumes:
+  stats-data:
+
+networks:
+  brady:
