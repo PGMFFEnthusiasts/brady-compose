@@ -17,10 +17,12 @@ services:
     user: "${UID_GID}"
     ports:
       - "25565:25565"
-    image: ghcr.io/pgmffenthusiasts/bradyverse-backend:latest
+    image: bradyverse-backend:latest
     stdin_open: true
     tty: true
     environment:
+      STANDALONE: true
+      MOJANG_EULA_AGREEMENT: true
       DATABASE_URI: stats-db:5432/stats
       DATABASE_USER: postgres
       DATABASE_PASS: secret
